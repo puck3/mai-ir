@@ -1,0 +1,22 @@
+db:
+  uri: "mongodb://db:27017"
+  database: "news_crawler"
+  collection: "documents"
+
+logic:
+  user_agent: "SimpleCrawler/1.0"
+
+  sources:
+    - name: "kp_sport"
+      index_url: "https://www.kp.ru/sitemap.xml"
+      include_patterns:
+        - "sports"
+        - "post-sitemap"
+      request_delay_sec: 2
+      content_container_class: kp-articles
+
+    - name: "rbc_sport"
+      index_url: "https://sportrbc.ru/sitemap_index.xml"
+      include_patterns: []
+      request_delay_sec: 2
+      content_container_class: article

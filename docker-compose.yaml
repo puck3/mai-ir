@@ -1,0 +1,39 @@
+services:
+  db:
+    image: mongo:8.2
+    volumes:
+      - mongo_data:/data/db
+    restart: unless-stopped
+    networks:
+      - mongo-network
+    ports:
+      - "27017:27017"
+
+  mongo-express:
+    image: mongo-express:1.0.2
+    restart: unless-stopped
+    depends_on:
+      - db
+    ports:
+      - "8081:8081"
+    environment:
+      ME_CONFIG_MONGODB_SERVER: db
+      ME_CONFIG_MONGODB_PORT: 27017
+      ME_CONFIG_BASICAUTH: "false"
+    networks:
+      - mongo-network
+
+  crawler:
+    build: ./crawler
+    depends_on:
+      - db
+    restart: unless-stopped
+    networks:
+      - mongo-network
+
+volumes:
+  mongo_data:
+
+networks:
+  mongo-network:
+    driver: bridge
